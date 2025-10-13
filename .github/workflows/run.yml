@@ -1,9 +1,9 @@
 name: Run GA Cafe24 Scripts
 
 on:
+  workflow_dispatch:      # 수동 실행
   schedule:
-    - cron: '1 15 * * 0'   # 매주 월요일 00:01 (한국시간)
-  workflow_dispatch:
+    - cron: '1 15 * * 0'  # 매주 월요일 00:01 KST (UTC 일 15:01)
 
 jobs:
   run:
@@ -12,10 +12,12 @@ jobs:
       TZ: 'Asia/Seoul'
     steps:
       - uses: actions/checkout@v4
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
+
       - name: Run both scripts
         run: |
           python GA_cafe24pro_data.py
