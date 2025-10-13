@@ -2,7 +2,7 @@ name: Run Python automatically
 
 on:
   schedule:
-    - cron: '0 22 * * 0'  # 매주 월요일 오전 7시 (한국 기준)
+    - cron: '1 15 * * 0'   # 일요일 15:01 UTC = 월요일 00:01 KST
   workflow_dispatch:
 
 jobs:
