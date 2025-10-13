@@ -1,0 +1,26 @@
+name: Run GA scripts
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '1 15 * * 0'  # 한국 월요일 00:01 (UTC 일 15:01)
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    env:
+      TZ: Asia/Seoul
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run both GA scripts
+        run: |
+          python GA_cafe24pro_data.py
+          python GA_cafe24pro_data_for_viral_paid_youtube.py
