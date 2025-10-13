@@ -1,18 +1,22 @@
-name: Run Python automatically
+name: Run GA Cafe24 Scripts
 
 on:
   schedule:
-    - cron: '1 15 * * 0'   # 일요일 15:01 UTC = 월요일 00:01 KST
+    - cron: '1 15 * * 0'   # 매주 월요일 00:01 (한국시간)
   workflow_dispatch:
 
 jobs:
   run:
     runs-on: ubuntu-latest
+    env:
+      TZ: 'Asia/Seoul'
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
-      - name: Run script
-        run: python main.py
+      - name: Run both scripts
+        run: |
+          python GA_cafe24pro_data.py
+          python GA_cafe24pro_data_for_viral_paid_youtube.py
