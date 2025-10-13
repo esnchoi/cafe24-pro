@@ -1,28 +1,17 @@
-name: Run GA Cafe24 Scripts
+name: GA main
 
 on:
-  workflow_dispatch:            # 수동 실행 버튼
+  workflow_dispatch:
   schedule:
-    - cron: '1 15 * * 0'        # 매주 월요일 00:01 KST (UTC 일 15:01)
+    - cron: '1 15 * * 0'   # 필요시 시간 동일
 
 jobs:
   run:
     runs-on: ubuntu-latest
-    env:
-      TZ: 'Asia/Seoul'
     steps:
       - uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-
-      - name: Install deps (optional)
-        run: |
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.10' }
+      - run: |
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-
-      - name: Run both scripts
-        run: |
           python GA_cafe24pro_data.py
-          python GA_cafe24pro_data_for_viral_paid_youtube.py
