@@ -1,11 +1,9 @@
-name: Google Analytics Daily Update
-
+name: Google Analytics Weekly Update
 on:
   schedule:
-    # 매일 오전 9시 (한국시간 기준, UTC로는 00:00)
-    - cron: '0 0 * * *'
+    # 매주 일요일 밤 11시 50분 (한국시간 기준, UTC로는 일요일 14:50)
+    - cron: '50 14 * * 0'
   workflow_dispatch:  # 수동 실행도 가능하게
-
 jobs:
   update-analytics:
     runs-on: ubuntu-latest
