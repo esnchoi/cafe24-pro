@@ -1,40 +1,39 @@
-name: Run GA_cafe24pro_data
+name: Google Analytics Daily Update
 
 on:
-  workflow_dispatch:
-  push:
-    branches: [ main ]
-    paths:
-      - GA_cafe24pro_data.py
-      - .github/workflows/run-ga.yml
   schedule:
-    - cron: '1 15 * * 0'   # 매주 일요일 00:01 KST (UTC 15:01)
+    # 매일 오전 9시 (한국시간 기준, UTC로는 00:00)
+    - cron: '0 0 * * *'
+  workflow_dispatch:  # 수동 실행도 가능하게
 
 jobs:
-  run:
+  update-analytics:
     runs-on: ubuntu-latest
-    env:
-      TZ: Asia/Seoul
+    
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install google-api-python-client google-auth google-auth-oauthlib google-auth-httplib2 pandas
-
-      - name: Write credentials from secrets
-        run: |
-          echo "${{ secrets.GA_CLIENT_SECRET_JSON }}" > ./client_secret.json
-          echo "${{ secrets.GA_TOKEN_JSON }}" > ./ga_token.json
-
-      - name: Sanity check
-        run: ls -la
-
-      - name: Run GA script
-        run: python GA_cafe24pro_data.py
+    - name: Checkout repository
+      uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Install dependencies
+      run: |
+        pip install --upgrade pip
+        pip install google-auth google-auth-oauthlib google-auth-httplib2 google-api-python-client
+    
+    - name: Create client_secret.json
+      run: |
+        echo '${{ secrets.GA_CLIENT_SECRET_JSON }}' > client_secret.json
+    
+    - name: Create ga_token.json
+      run: |
+        echo '${{ secrets.GA_TOKEN_JSON }}' > ga_token.json
+    
+    - name: Run Analytics Script
+      env:
+        GITHUB_ACTIONS: true
+      run: |
+        python your_script_name.py
