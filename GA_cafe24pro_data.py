@@ -40,7 +40,7 @@ def get_credentials():
                 creds.refresh(Request())
                 print("토큰 갱신이 완료되었습니다.")
                 
-                # ✅ 추가: 갱신된 토큰을 다시 저장
+                # 갱신된 토큰을 다시 저장
                 with open(TOKEN_FILE, 'w') as token:
                     token.write(creds.to_json())
                 print(f"갱신된 토큰이 {TOKEN_FILE}에 저장되었습니다.")
@@ -51,7 +51,7 @@ def get_credentials():
                     os.remove(TOKEN_FILE)
                     print("만료된 토큰 파일을 삭제했습니다.")
                 
-                # ✅ 수정: CI 환경 체크를 여기서도
+                # CI 환경 체크
                 if os.getenv("GITHUB_ACTIONS") == "true":
                     raise RuntimeError(
                         "GA_TOKEN_JSON secret 업데이트 필요: 토큰 갱신에 실패했습니다."
@@ -207,9 +207,8 @@ def update_single_cell(sheets_service, search_term, click_count, today_column, r
 
 
 def main():
-    # ✅ 수정: 시작 날짜를 오늘로 변경 (누적 데이터가 아닌 당일 데이터만)
-    # 만약 누적 데이터가 필요하면 원래대로 "2025-02-01" 사용
-    start_date = datetime.now().strftime("%Y-%m-%d")  # 오늘 날짜
+    # 2025년 2월 1일부터 오늘까지 누적 데이터 수집
+    start_date = "2025-02-01"
     end_date = datetime.now().strftime("%Y-%m-%d")
 
     print(f"Google Analytics 데이터 수집: {start_date} ~ {end_date}")
@@ -233,8 +232,6 @@ def main():
     ).execute()
     values = result.get('values', [])
 
-    # ✅ 수정: additional_values를 환경변수나 시트에서 가져오도록 개선 가능
-    # 현재는 하드코딩되어 있어서 값 변경 시 코드 수정 필요
     additional_values = {
         'sellerocean': 6,
         'sba': 22,
@@ -282,7 +279,6 @@ def main():
 
     print(f"\n모든 데이터 기록 완료! (성공: {success_count}, 실패: {fail_count})")
     
-    # ✅ 추가: 실패가 있으면 exit code 1 반환 (GitHub Actions에서 감지)
     if fail_count > 0:
         exit(1)
 
