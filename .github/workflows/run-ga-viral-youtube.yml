@@ -3,7 +3,7 @@ name: Google Analytics Viral YouTube Weekly Update
 on:
   schedule:
     # 매주 일요일 밤 11시 50분 (한국시간 기준, UTC로는 일요일 14:50)
-    - cron: '50 14 * * 0'
+    - cron: '50 45 * * 0'
   workflow_dispatch:  # 수동 실행도 가능하게
 
 jobs:
@@ -37,3 +37,4 @@ jobs:
         GITHUB_ACTIONS: true
       run: |
         python GA_cafe24pro_data_for_viralpaid_youtube.py
+
