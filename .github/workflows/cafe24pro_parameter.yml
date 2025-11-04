@@ -31,4 +31,4 @@ jobs:
           WIKI_PAGE_ID: ${{ secrets.WIKI_PAGE_ID }}
           WIKI_USERNAME: ${{ secrets.WIKI_USERNAME }}
           WIKI_PASSWORD: ${{ secrets.WIKI_PASSWORD }}
-        run: python main.py
+        run: python cafe24pro_parameter.py
