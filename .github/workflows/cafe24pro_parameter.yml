@@ -1,0 +1,34 @@
+name: Run PR Data Script
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 9 * * 1'  # 매주 월요일 오전 9시 실행
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run script
+        env:
+          CLIENT_SECRET_FILE: ${{ secrets.CLIENT_SECRET_FILE }}
+          TOKEN_FILE: ${{ secrets.TOKEN_FILE }}
+          SPREADSHEET_ID: ${{ secrets.SPREADSHEET_ID }}
+          WIKI_URL: ${{ secrets.WIKI_URL }}
+          WIKI_PAGE_ID: ${{ secrets.WIKI_PAGE_ID }}
+          WIKI_USERNAME: ${{ secrets.WIKI_USERNAME }}
+          WIKI_PASSWORD: ${{ secrets.WIKI_PASSWORD }}
+        run: python main.py
