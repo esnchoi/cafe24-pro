@@ -3,7 +3,7 @@ name: Run PR Data Script
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 9 * * 1'  # 매주 월요일 오전 9시 실행
+    - cron: '0 23 * * *'  # 매일 오전 8시 (Asia/Seoul=UTC+9)
 
 jobs:
   run-script:
