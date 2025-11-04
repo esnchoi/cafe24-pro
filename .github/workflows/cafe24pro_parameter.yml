@@ -1,4 +1,4 @@
-name: Run PR Data Script
+name: Run cafe24pro parameter
 
 on:
   workflow_dispatch:
