@@ -1,8 +1,8 @@
 name: Google Analytics Weekly Update
 on:
   schedule:
-    # 매주 일요일 오전 8시 50분 (한국시간 기준, UTC로는 토요일 23:50)
-    - cron: '50 23 * * 6'
+    # 매주 일요일 오전 8시 45분 (한국시간 기준, UTC로는 토요일 23:50)
+    - cron: '45 23 * * 6'
   workflow_dispatch:  # 수동 실행도 가능하게
 jobs:
   update-analytics:
