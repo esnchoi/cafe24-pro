@@ -3,8 +3,8 @@ name: Run cafe24pro parameter
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 23 * * *'  # 매일 오전 8시 (Asia/Seoul=UTC+9)
-
+  - cron: '40 23 * * 0'  # UTC 일요일 23:40 → KST 월요일 08:40
+  
 jobs:
   run-script:
     runs-on: ubuntu-latest
