@@ -1,0 +1,49 @@
+name: Cafe24 Pro Parameter Campaign
+
+on:
+  schedule:
+    - cron: "50 23 * * 0"   # 매주 일요일 23:50 UTC = 일요일 08:50 KST
+  workflow_dispatch:        # 필요시 수동 실행
+
+jobs:
+  run-campaign-script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install google-auth google-auth-oauthlib google-auth-httplib2 google-api-python-client
+
+      - name: Create client_secret.json
+        run: |
+          echo "${{ secrets.GA_CLIENT_SECRET_JSON }}" > client_secret.json
+
+      - name: Restore GA token
+        uses: actions/cache@v3
+        with:
+          path: ga_token.json
+          key: ${{ runner.os }}-ga-token
+
+      - name: Run campaign script
+        env:
+          GA_CLIENT_SECRET_FILE: "client_secret.json"
+          GA_TOKEN_FILE: "ga_token.json"
+          GA_PROPERTY_ID: ${{ secrets.GA_PROPERTY_ID }}
+          GA_SEARCH_TERMS_SHEET_ID: ${{ secrets.GA_SEARCH_TERMS_SHEET_ID }}
+        run: |
+          python cafe24pro_parameter_campain.py
+
+      - name: Save GA token
+        uses: actions/cache@v3
+        with:
+          path: ga_token.json
+          key: ${{ runner.os }}-ga-token
