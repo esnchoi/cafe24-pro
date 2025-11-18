@@ -2,8 +2,10 @@ name: Cafe24 Pro Parameter Campaign
 
 on:
   schedule:
-    - cron: "50 23 * * 0"   # 매주 일요일 23:50 UTC = 일요일 08:50 KST
-  workflow_dispatch:        # 필요시 수동 실행
+    # 매주 일요일 오전 8:50 KST
+    # → UTC 기준 토요일 23:50
+    - cron: "50 23 * * 6"
+  workflow_dispatch:
 
 jobs:
   run-campaign-script:
@@ -16,12 +18,12 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.10"
+          python-version: "3.11"
 
       - name: Install dependencies
         run: |
-          pip install --upgrade pip
-          pip install google-auth google-auth-oauthlib google-auth-httplib2 google-api-python-client
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt   # ★ requirements.txt 그대로 사용
 
       - name: Create client_secret.json
         run: |
@@ -40,7 +42,7 @@ jobs:
           GA_PROPERTY_ID: ${{ secrets.GA_PROPERTY_ID }}
           GA_SEARCH_TERMS_SHEET_ID: ${{ secrets.GA_SEARCH_TERMS_SHEET_ID }}
         run: |
-          python cafe24pro_parameter_campain.py
+          python cafe24pro_parameter_campain.py  # ★ 너가 말한 정확한 실행 파일명
 
       - name: Save GA token
         uses: actions/cache@v3
